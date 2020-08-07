@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import api from "../../services/api";
+
 import moment from "moment";
 import {
   Button,
@@ -10,8 +10,10 @@ import {
   DropdownMenu,
   DropdownToggle,
 } from "reactstrap";
+import api from "../../services/api";
 import socketio from "socket.io-client";
 import "./dashboard.css";
+import url from "../../services/url";
 
 export default function Dashboard({ history }) {
   const [events, setEvents] = useState([]);
@@ -33,10 +35,9 @@ export default function Dashboard({ history }) {
     getEvents();
   }, []);
 
-  const socket = useMemo(
-    () => socketio("http://localhost:8000/", { query: { user: user_id } }),
-    [user_id]
-  );
+  const socket = useMemo(() => socketio(url, { query: { user: user_id } }), [
+    user_id,
+  ]);
 
   useEffect(() => {
     socket.on("registration_request", (data) =>
